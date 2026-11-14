@@ -1,7 +1,12 @@
-export const API_BASE =
-  typeof window !== 'undefined' && window.location.port === '5173'
-    ? 'http://localhost:3001'
-    : '';
+export const getApiBase = (): string => {
+  if (typeof window === 'undefined') return '';
+  const stored = localStorage.getItem('KAHOOT_BACKEND_URL');
+  if (stored) return stored.replace(/\/$/, '');
+  if (window.location.port === '5173') return 'http://localhost:3001';
+  return '';
+};
+
+export const API_BASE = getApiBase();
 
 export function resolveMediaUrl(url?: string): string {
   if (!url) return '';
