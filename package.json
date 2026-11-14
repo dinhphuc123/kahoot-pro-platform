@@ -1,0 +1,18 @@
+{
+  "name": "kahoot-pro-platform",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Kahoot-Style Multimedia & Educational Quiz Platform (Live Arena, Self-Paced, KaTeX, <=100MB Media, Analytics)",
+  "scripts": {
+    "install:all": "npm install && npm --prefix server install && npm --prefix client install",
+    "dev:server": "npm --prefix server run dev",
+    "dev:client": "npm --prefix client run dev",
+    "dev": "concurrently -k -n SERVER,CLIENT -c cyan,magenta \"npm run dev:server\" \"npm run dev:client\"",
+    "build": "npm --prefix server run build && npm --prefix client run build",
+    "test": "npm --prefix server test",
+    "lint": "npm --prefix server run lint && npm --prefix client run lint"
+  },
+  "devDependencies": {
+    "concurrently": "^9.1.0"
+  }
+}
