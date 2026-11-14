@@ -1,5 +1,7 @@
 import express from 'express';
 import cors from 'cors';
+import path from 'node:path';
+import fs from 'node:fs';
 import { createServer } from 'node:http';
 import { Server as SocketIOServer } from 'socket.io';
 import { getDb } from './db/database.ts';
@@ -38,6 +40,24 @@ app.use('/api/quizzes', createQuizzesRouter(db));
 app.use('/api/media', mediaRouter);
 app.use('/api/self-paced', createSelfPacedRouter(db));
 app.use('/api/reports', createReportsRouter(db));
+
+// Serve static frontend build in production / single-port mode
+const clientDistCandidates = [
+  path.resolve(process.cwd(), '../client/dist'),
+  path.resolve(process.cwd(), 'client/dist'),
+  path.resolve(process.cwd(), 'dist'),
+];
+const clientDistPath = clientDistCandidates.find((p) => fs.existsSync(p));
+
+if (clientDistPath) {
+  app.use(express.static(clientDistPath));
+  app.get('*', (req, res, next) => {
+    if (req.path.startsWith('/api') || req.path.startsWith('/socket.io')) {
+      return next();
+    }
+    res.sendFile(path.join(clientDistPath, 'index.html'));
+  });
+}
 
 const httpServer = createServer(app);
 const io = new SocketIOServer(httpServer, {

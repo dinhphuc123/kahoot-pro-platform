@@ -9,6 +9,7 @@
     "dev:client": "npm --prefix client run dev",
     "dev": "concurrently -k -n SERVER,CLIENT -c cyan,magenta \"npm run dev:server\" \"npm run dev:client\"",
     "build": "npm --prefix server run build && npm --prefix client run build",
+    "start": "node server/src/index.ts",
     "test": "npm --prefix server test",
     "lint": "npm --prefix server run lint && npm --prefix client run lint"
   },
